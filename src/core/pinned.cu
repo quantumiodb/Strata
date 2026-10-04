@@ -243,6 +243,14 @@ void* reserve(uint64_t bytes, PageBacking& got, std::string& note, const std::st
         if (note.size() >= four_k.size() && note.compare(note.size() - four_k.size(), four_k.size(), four_k) == 0)
             note.resize(note.size() - four_k.size());
         note += "; transparent huge pages requested (MADV_HUGEPAGE)";
+        // local: populate now, while free memory is still large and unfragmented (before the model file streams
+        // through the page cache), so the kernel hands out 2 MiB pages for nearly the whole arena instead of only
+        // the part that still finds contiguous memory later.  MADV_POPULATE_WRITE is Linux 5.14+; older kernels
+        // return EINVAL and the loader faults the pages in as before.
+#ifndef MADV_POPULATE_WRITE
+#define MADV_POPULATE_WRITE 23
+#endif
+        if (madvise(p, bytes, MADV_POPULATE_WRITE) == 0) note += " and pre-populated";
     }
     return p;
 #endif
