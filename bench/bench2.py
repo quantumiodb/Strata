@@ -10,7 +10,7 @@ res=[]
 for r in range(runs):
   for name,c in P:
     body={"model":"strata","messages":[{"role":"user","content":c}],"max_tokens":384,"reasoning_effort":"none"}; body.update(extra)
-    t=time.time(); o=json.load(urllib.request.urlopen(urllib.request.Request(URL,json.dumps(body).encode(),{"Content-Type":"application/json"}),timeout=600)); w=time.time()-t
+    t=time.time(); o=json.load(urllib.request.urlopen(urllib.request.Request(URL,json.dumps(body).encode(),{"Content-Type":"application/json","Authorization":"Bearer "+open(__import__("os").path.expanduser("~/.config/strata/api_key")).read().strip()}),timeout=600)); w=time.time()-t
     tm=o["timings"]; res.append((name,tm["predicted_n"],tm["predicted_per_second"],tm.get("draft_n_accepted",0),tm.get("draft_n",0)))
     print(f"{tag} {name:6} gen={tm['predicted_n']:4} tok/s={tm['predicted_per_second']:6.1f} draft={tm.get('draft_n_accepted',0)}/{tm.get('draft_n',0)} wall={w:5.1f}",flush=True)
 tot_tok=sum(x[1] for x in res); tot_s=sum(x[1]/x[2] for x in res)
