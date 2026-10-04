@@ -56,3 +56,11 @@ build-vision-cuda12.bat
 
 /.ccache/
 /.rocm-win/
+engine-cu13/
+engine-local-cuda12/
+build-cu13/
+*.bak-*
+strata-server.out
+bench-*.txt
+data/expert-profile-local.bin
+setup-*.log
