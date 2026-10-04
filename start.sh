@@ -1,6 +1,6 @@
 #!/bin/bash
 # Strata 启动脚本：./start.sh [start|stop|status|restart]
-# 引擎是本机用 CUDA 12.2 编译的 engine/strata（驱动 535），配置 strata-iq2_xs.json
+# 引擎是本机编译的 engine/strata（当前为 CUDA 13 wheel 工具链构建，驱动 580；CUDA 12.2 版备份在 engine-local-cuda12/），配置 strata-<model>.json
 cd "$(dirname "$0")" || exit 1
 MODEL="${STRATA_MODEL:-iq2_xs}"   # 哪个模型：STRATA_MODEL=q2_0 ./start.sh start
 PORT=8080
